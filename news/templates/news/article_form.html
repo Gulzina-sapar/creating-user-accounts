@@ -1,0 +1,13 @@
+{% extends 'news/base.html' %}
+{% block title %}Редактирование статьи{% endblock %}
+{% block content %}
+<div class="card bg-dark text-white border-secondary shadow p-4">
+  <h3>📝 Форма статьи</h3>
+  <form method="post" class="mt-3">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">💾 Сохранить</button>
+    <a href="{% url 'article_list' %}" class="btn btn-outline-light">Назад</a>
+  </form>
+</div>
+{% endblock %}

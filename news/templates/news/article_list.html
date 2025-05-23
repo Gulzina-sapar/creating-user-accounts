@@ -1,0 +1,30 @@
+{% extends 'news/base.html' %}
+{% block title %}Новости{% endblock %}
+{% block content %}
+
+<h1 class="mb-4">📰 Последние новости</h1>
+
+{% if user.is_authenticated %}
+  <a href="{% url 'article_create' %}" class="btn btn-success mb-4">➕ Новая статья</a>
+{% endif %}
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+  {% for article in articles %}
+    <div class="col">
+      <div class="card bg-dark text-white h-100 shadow-sm border-info">
+        <div class="card-body">
+          <h5 class="card-title">{{ article.title }}</h5>
+          <p class="card-text">{{ article.body|truncatewords:25 }}</p>
+          <a href="{% url 'article_detail' article.pk %}" class="btn btn-outline-info btn-sm">Читать</a>
+          {% if user.is_authenticated %}
+            <a href="{% url 'article_edit' article.pk %}" class="btn btn-outline-warning btn-sm">Редактировать</a>
+            <a href="{% url 'article_delete' article.pk %}" class="btn btn-outline-danger btn-sm"
+               onclick="return confirm('Удалить статью?');">Удалить</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

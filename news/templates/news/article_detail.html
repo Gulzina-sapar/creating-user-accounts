@@ -1,0 +1,16 @@
+{% extends 'news/base.html' %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
+<div class="card bg-dark text-white border-info shadow p-4">
+  <h2>{{ article.title }}</h2>
+  <p class="mt-3">{{ article.body }}</p>
+  <div class="mt-4">
+    <a href="{% url 'article_list' %}" class="btn btn-outline-light">← Назад к списку</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'article_edit' article.pk %}" class="btn btn-outline-warning">Редактировать</a>
+      <a href="{% url 'article_delete' article.pk %}" class="btn btn-outline-danger"
+         onclick="return confirm('Удалить статью?');">Удалить</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
