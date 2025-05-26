@@ -2,9 +2,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Article
 from .forms import ArticleForm
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth import views as auth_views
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from django.db.models import Q
 
 def article_list(request):
     articles = Article.objects.all().order_by('-created_at')
@@ -56,3 +59,21 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'news/register.html', {'form': form})
+
+def custom_logout_view(request):
+    messages.success(request, "✅ Вы успешно вышли из аккаунта.")
+    return auth_views.LogoutView.as_view(next_page='article_list')(request)
+
+# Поисковик
+def search_articles(request):
+    query = request.GET.get('q')
+    results = []
+    if query:
+        results = Article.objects.filter(title__icontains=query) | Article.objects.filter(body__icontains=query)
+    return render(request, 'news/search_results.html', {'query': query, 'results': results})
+
+# О нас
+
+def about_page(request):
+    return render(request, 'news/about.html')
+
